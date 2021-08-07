@@ -7,12 +7,31 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Paulo-Lopes-Estevao/go_graphql_postegres/app"
 	"github.com/Paulo-Lopes-Estevao/go_graphql_postegres/graph/generated"
 	"github.com/Paulo-Lopes-Estevao/go_graphql_postegres/graph/model"
+	"github.com/Paulo-Lopes-Estevao/go_graphql_postegres/utils"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+
+	db := utils.ConnectDB()
+
+	user := model.NewUser{
+		Name:  input.Name,
+		Email: input.Email,
+		Idade: input.Idade,
+	}
+
+	repo := app.UserRespositoryDb{Db: db}
+	result, err := repo.Insert(&user)
+
+	if err != nil {
+		panic(fmt.Errorf("not implemented"))
+	}
+
+	fmt.Println(result)
+
 }
 
 func (r *queryResolver) User(ctx context.Context) ([]*model.User, error) {
